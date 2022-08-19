@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+
+env:
+  CI_REGISTRY_USER: zielak
+  CI_REGISTRY_IMAGE: cups
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      DOCKER_BUILD_ARGS: ${{ steps.prepare-docker.outputs.DOCKER_BUILD_ARGS }}
+    steps:
+      - name: Prepare docker & build args
+        id: prepare-docker
+        run: |
+          docker login -u $CI_REGISTRY_USER -p ${{ secrets.DOCKER_TOKEN }}
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+          export DOCKER_BUILD_ARGS="--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=$GITHUB_SHA"
+          echo "::set-output name=DOCKER_BUILD_ARGS::$DOCKER_BUILD_ARGS"
+
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: prepare
+    strategy:
+      matrix:
+        arch: [amd64, arm32v7, arm64v8]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Build
+        run: docker build --build-arg ARCH=${{ matrix.arch }} ${{ needs.prepare.outputs.DOCKER_BUILD_ARGS }} -t $CI_REGISTRY_IMAGE:$GITHUB_RUN_ID-${{ matrix.arch }} .
