@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  CI_REGISTRY_USER: zielak
+  CI_REGISTRY_USER: ekbosley
   CI_REGISTRY_IMAGE: cups
 
 jobs:

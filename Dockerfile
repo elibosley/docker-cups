@@ -10,13 +10,13 @@ ARG BUILD_DATE
 ENV ADMIN_PASSWORD=admin
 
 # labels
-LABEL maintainer="Florian Schwab <me@ydkn.io>" \
+LABEL maintainer="Eli Bosley <eli@bosley.dev>" \
   org.label-schema.schema-version="1.0" \
-  org.label-schema.name="ydkn/cups" \
+  org.label-schema.name="elibosley/cups" \
   org.label-schema.description="Simple CUPS docker image" \
   org.label-schema.version="0.1" \
-  org.label-schema.url="https://hub.docker.com/r/ydkn/cups" \
-  org.label-schema.vcs-url="https://gitlab.com/ydkn/docker-cups" \
+  org.label-schema.url="https://hub.docker.com/r/elibosley/cups" \
+  org.label-schema.vcs-url="https://github.com/elibosley/docker-cups" \
   org.label-schema.vcs-ref=$VCS_REF \
   org.label-schema.build-date=$BUILD_DATE
 
