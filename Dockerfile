@@ -24,6 +24,11 @@ LABEL maintainer="Florian Schwab <me@ydkn.io>" \
 RUN apt-get update \
   && apt-get install -y \
   sudo \
+  build-essential \
+  cmake \
+  git \
+  libcups2-dev \
+  qpdf \
   cups \
   cups-bsd \
   cups-filters \
@@ -36,6 +41,16 @@ RUN apt-get update \
   usbutils \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
+
+
+RUN apt-get remove -y printer-driver-brlaser
+
+# install BRLaser
+RUN git clone https://github.com/pdewacht/brlaser.git \
+  && cd brlaser \
+  && cmake . \
+  && make \
+  && make install
 
 # add print user
 RUN adduser --home /home/admin --shell /bin/bash --gecos "admin" --disabled-password admin \
