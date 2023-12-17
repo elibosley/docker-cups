@@ -31,12 +31,6 @@ RUN apt-get update \
   cups \
   cups-bsd \
   cups-filters \
-  foomatic-db-compressed-ppds \
-  printer-driver-all \
-  openprinting-ppds \
-  hpijs-ppds \
-  hp-ppd \
-  hplip \
   usbutils \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
