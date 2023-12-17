@@ -1,6 +1,5 @@
 # base image
-ARG ARCH=amd64
-FROM $ARCH/debian:buster-slim
+FROM debian:buster-slim
 
 # args
 ARG VCS_REF
@@ -73,6 +72,7 @@ RUN cp -rp /etc/cups /etc/cups-skel
 
 # entrypoint
 ADD docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 
 # default command
