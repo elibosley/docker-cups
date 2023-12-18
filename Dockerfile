@@ -1,6 +1,6 @@
 # base image
+FROM debian:buster-slim
 
-FROM --platform=amd64 debian:buster-slim
 # args
 ARG VCS_REF
 ARG BUILD_DATE
@@ -25,7 +25,6 @@ RUN apt-get update \
   sudo \
   build-essential \
   cmake \
-  curl \
   git \
   libcups2-dev \
   qpdf \
@@ -37,19 +36,14 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 
-ARG BRPRINTER_VERSION=2.2.3-1
-RUN curl -O https://download.brother.com/welcome/dlf006893/linux-brprinter-installer-${BRPRINTER_VERSION}.gz \
-  && gunzip linux-brprinter-installer-${BRPRINTER_VERSION}.gz \
-  && chmod +x linux-brprinter-installer-${BRPRINTER_VERSION} \
-  && ./linux-brprinter-installer-${BRPRINTER_VERSION} HL-L2300D \
-  && rm linux-brprinter-installer-${BRPRINTER_VERSION}
+RUN apt-get remove -y printer-driver-brlaser
 
 # install BRLaser
-#RUN git clone https://github.com/pdewacht/brlaser.git \
-#  && cd brlaser \
-#  && cmake . \
-#  && make \
-#  && make install
+RUN git clone https://github.com/pdewacht/brlaser.git \
+  && cd brlaser \
+  && cmake . \
+  && make \
+  && make install
 
 # add print user
 RUN adduser --home /home/admin --shell /bin/bash --gecos "admin" --disabled-password admin \
